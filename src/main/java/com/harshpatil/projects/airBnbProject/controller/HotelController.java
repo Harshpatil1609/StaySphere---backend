@@ -48,4 +48,11 @@ public class HotelController {
         boolean exists=hotelService.deleteHotelById(id);
         return ResponseEntity.ok(exists);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> activateHotel(@PathVariable Long id)
+    {
+        hotelService.activateHotel(id);
+        return ResponseEntity.noContent().build();
+    }
 }
