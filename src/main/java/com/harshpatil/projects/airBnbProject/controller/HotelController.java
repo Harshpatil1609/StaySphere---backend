@@ -1,12 +1,16 @@
 package com.harshpatil.projects.airBnbProject.controller;
 
 import com.harshpatil.projects.airBnbProject.dto.HotelDto;
+import com.harshpatil.projects.airBnbProject.entity.Hotel;
 import com.harshpatil.projects.airBnbProject.services.HotelService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/hotels")
@@ -33,6 +37,13 @@ public class HotelController {
         HotelDto hotel=hotelService.getHotelById(id);
 
         return ResponseEntity.ok(hotel);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<HotelDto>> getAllHotel()
+    {
+        List<HotelDto> hotelDtoList=hotelService.getAllHotel();
+        return ResponseEntity.ok(hotelDtoList);
     }
 
     @PutMapping("/{id}")

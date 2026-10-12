@@ -2,6 +2,9 @@ package com.harshpatil.projects.airBnbProject.entity.enums;
 
 public enum BookingStatus {
     RESERVED,
-    PENDING,
-    CONFIRMEND
+    GUSETS_ADDED,
+    PAYMENT_PENDING,
+    CONFIRMEND,
+    CANCELLED,
+    EXPIRED
 }
