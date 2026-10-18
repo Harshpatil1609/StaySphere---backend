@@ -6,11 +6,13 @@ import com.harshpatil.projects.airBnbProject.dto.GuestDto;
 import com.harshpatil.projects.airBnbProject.entity.*;
 import com.harshpatil.projects.airBnbProject.entity.enums.BookingStatus;
 import com.harshpatil.projects.airBnbProject.exception.ResourceNotFoundException;
+import com.harshpatil.projects.airBnbProject.exception.UnAuthorizedException;
 import com.harshpatil.projects.airBnbProject.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -98,6 +100,13 @@ public class BookingServiceImpl implements BookingServie {
             throw new IllegalStateException("booking has already expired");
         }
 
+        User user=getCurrentUser();
+
+        if(!user.equals(booking.getUser()))
+        {
+            throw new UnAuthorizedException("Booking does not belong to this user with id : "+user.getId());
+        }
+
         if(booking.getBookingStatus() != BookingStatus.RESERVED)
         {
             throw new IllegalStateException("booking is not under reserved state cannot add guests");
@@ -124,8 +133,7 @@ public class BookingServiceImpl implements BookingServie {
 
     public User getCurrentUser()
     {
-        User user=new User();
-        user.setId(1L);
-        return user;
+
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
