@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,4 +26,5 @@ public class BookingDto {
     private LocalDate checkOutDate;
     private BookingStatus bookingStatus;
     private Set<Guest> guests=new HashSet<>();
+    private BigDecimal amount;
 }
