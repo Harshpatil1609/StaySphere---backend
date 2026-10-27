@@ -1,7 +1,10 @@
 package com.harshpatil.projects.airBnbProject.controller;
 
+import com.harshpatil.projects.airBnbProject.dto.BookingDto;
 import com.harshpatil.projects.airBnbProject.dto.HotelDto;
+import com.harshpatil.projects.airBnbProject.dto.HotelReportDto;
 import com.harshpatil.projects.airBnbProject.entity.Hotel;
+import com.harshpatil.projects.airBnbProject.services.BookingServie;
 import com.harshpatil.projects.airBnbProject.services.HotelService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,6 +24,7 @@ import java.util.List;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final BookingServie bookingServie;
 
     @PostMapping
     public ResponseEntity<HotelDto> creatNewHotel(@RequestBody HotelDto hotelDto)
@@ -65,5 +71,27 @@ public class HotelController {
     {
         hotelService.activateHotel(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{hotelId}/bookings")
+    public ResponseEntity<List<BookingDto>>getAllBookingByHotelId(@PathVariable Long hotelId)
+    {
+        return ResponseEntity.ok(bookingServie.getAllBookingByHotelId(hotelId));
+    }
+
+    @GetMapping("/{hotelID}/reports")
+    public ResponseEntity<HotelReportDto> getHotelReport(@PathVariable Long hotelID,
+                                                         @RequestParam(required = false)LocalDate startDate,
+                                                         @RequestParam(required = false)LocalDate endDate)
+    {
+        if(startDate ==null )
+        {
+            startDate=LocalDate.now().minusMonths(1);
+        }
+        if (endDate == null)
+        {
+            endDate=LocalDate.now();
+        }
+        return ResponseEntity.ok(bookingServie.getHotelReport(hotelID,startDate,endDate));
     }
 }

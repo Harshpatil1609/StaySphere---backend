@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.harshpatil.projects.airBnbProject.util.AppUtils.getCurrentUser;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -55,7 +57,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(user.equals(hotel.getOwner()))
+        if(!user.equals(hotel.getOwner()))
         {
             throw new UnAuthorizedException("this user does not own this hotel with id : "+id);
         }
@@ -77,7 +79,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(user.equals(hotel.getOwner()))
+        if(!user.equals(hotel.getOwner()))
         {
             throw new UnAuthorizedException("this user does not own this hotel with id : "+id);
         }
@@ -99,7 +101,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(user.equals(hotel.getOwner()))
+        if(!user.equals(hotel.getOwner()))
         {
             throw new UnAuthorizedException("this user does not own this hotel with id : "+id);
         }
@@ -127,7 +129,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(user.equals(hotel.getOwner()))
+        if(!user.equals(hotel.getOwner()))
         {
             throw new UnAuthorizedException("this user does not own this hotel with id : "+id);
         }
@@ -148,7 +150,12 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<HotelDto> getAllHotel() {
-        List<Hotel> hotelList = hotelRepository.findAll();
+
+        User user=getCurrentUser();
+
+        log.info("Getting all hotels for the admin user with ID : {}",user.getId());
+
+        List<Hotel> hotelList = hotelRepository.findByOwner(user);
 
         return hotelList
                 .stream()

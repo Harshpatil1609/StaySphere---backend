@@ -3,6 +3,7 @@ package com.harshpatil.projects.airBnbProject.controller;
 import com.harshpatil.projects.airBnbProject.dto.BookingDto;
 import com.harshpatil.projects.airBnbProject.dto.BookingRequestDto;
 import com.harshpatil.projects.airBnbProject.dto.GuestDto;
+import com.harshpatil.projects.airBnbProject.dto.GuestUpdateRequestDto;
 import com.harshpatil.projects.airBnbProject.entity.Booking;
 import com.harshpatil.projects.airBnbProject.services.BookingServie;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,22 @@ public class HotelBookingController {
     {
 
         return ResponseEntity.ok(Map.of("status : ",bookingServie.getBookingStatus(bookingId)));
+    }
+
+    @PutMapping("/{bookingId}/guests/{guestId}")
+    public ResponseEntity<BookingDto> updateGuest(@PathVariable Long bookingId,
+                                                  @PathVariable Long guestId,
+                                                  @RequestBody GuestUpdateRequestDto guestUpdateRequestDto)
+    {
+        return ResponseEntity.ok(bookingServie.updateGuest(bookingId,guestId,guestUpdateRequestDto));
+    }
+
+    @DeleteMapping("/{bookingId}/guests/{guestId}")
+    public ResponseEntity<Void> deleteGuest(@PathVariable Long bookingId,
+                                            @PathVariable Long guestId)
+    {
+        bookingServie.deleteGuest(bookingId,guestId);
+        return ResponseEntity.noContent().build();
     }
 
 }
